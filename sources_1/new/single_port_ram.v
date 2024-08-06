@@ -1,8 +1,8 @@
 module single_port_ram
 #(
     parameter DATA_WIDTH = 2,         // Tenary weights
-    parameter ADDR_WIDTH = 10,          // Max graph size 1024 (for now)
-    parameter NUM_NEURON = 1024
+    parameter ADDR_WIDTH = 9,          // Max graph size 1024 (for now)
+    parameter NUM_NEURON = 512
 )
 (
     input wire                  clk,    // Clock

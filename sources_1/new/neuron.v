@@ -41,6 +41,7 @@ module neuron#(
     input wire [FP_DATA_WIDTH-1:0]      Vmem_in, // 16 bits
     input wire [TEN_DATA_WIDTH-1:0]     Q_in, // 2 bits
     input wire [FP_DATA_WIDTH-1:0]      mu_in, // 16 bits
+    input wire [NEURON_ID_WIDTH-1:0]    active_neuron,                    //added
     // Data from network
     input wire [TEN_DATA_WIDTH+NEURON_ID_WIDTH-1:0]   spike_in, // 12 bits
     // Done from network
@@ -77,7 +78,6 @@ module neuron#(
     reg [NEURON_ID_WIDTH-1:0]   Q_addr_in;
     reg [NEURON_ID_WIDTH-1:0]   Q_addr_out;
     reg [TEN_DATA_WIDTH-1:0]    Q_data_in;
-    wire[TEN_DATA_WIDTH-1:0]    Q_data_out;
     reg [NEURON_ID_WIDTH:0]     Q_counter;
 
     reg     QDoneD, QDoneQ;
@@ -198,7 +198,7 @@ module neuron#(
             
             WRQ: begin
 //                if (Q_counter < 2**Q_ADDR_WIDTH) begin
-                if (Q_counter < NUM_NEURON) begin
+                if (Q_counter < active_neuron) begin                              //added
                     Q_we = 1'b1;
                     en_Q_counter = 1'b1;
                     Q_data_in = Q_in;
@@ -263,7 +263,7 @@ module neuron#(
  
             RECV2: begin
                 next_state = EMIT;
-                VmemSD = spinQ ? VmemQ : {~VmemQ[FP_DATA_WIDTH-1], VmemQ[FP_DATA_WIDTH-2:0]};
+                VmemSD = spinQ ? VmemQ : {{~VmemQ[FP_DATA_WIDTH-1:0]}+1};
             end
 
             EMIT: begin
@@ -302,7 +302,7 @@ module neuron#(
         if (!reset_l)begin
             curr_state <= IDLE;
             // Data reg
-            spinQ <= {TEN_DATA_WIDTH{1'b0}};
+            spinQ <= {TEN_DATA_WIDTH{1'b1}};
             VmemQ <= {FP_DATA_WIDTH{1'b0}};
             neuronIQ <= {NEURON_ID_WIDTH{1'b0}};
             muQ <= {FP_DATA_WIDTH{1'b0}};

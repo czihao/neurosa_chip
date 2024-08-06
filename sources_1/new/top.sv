@@ -22,8 +22,8 @@
 module top_neurons#(
     parameter FP_DATA_WIDTH = 16,
     parameter TEN_DATA_WIDTH = 2,
-    parameter NUM_NEURON = 1024,
-    parameter NEURON_ID_WIDTH = 10
+    parameter NUM_NEURON = 512,
+    parameter NEURON_ID_WIDTH = 9
 ) (
     input wire                          clk,
     input wire                          reset_l,
@@ -32,6 +32,9 @@ module top_neurons#(
     input wire [FP_DATA_WIDTH-1:0]      ins,
     output reg [FP_DATA_WIDTH-1:0]      outs
 );    
+
+    reg [NEURON_ID_WIDTH-1:0] active_neuronD, active_neuronQ;           //added
+    reg [3:0] bits_in_active_neuron;                                     //added
 
     reg [NEURON_ID_WIDTH-1:0]   neuronI_in;
     reg [FP_DATA_WIDTH-1:0]     Vmem_in;
@@ -127,7 +130,8 @@ module top_neurons#(
                     .neuronWrNeuronIDone(neuronWrNeuronIDone[i]),
                     .neuronWrMuDone(neuronWrMuDone[i]),
                     .neuronWrDone(neuronWrDone[i]),
-                    .en_network(en_network[i])
+                    .en_network(en_network[i]),
+                    .active_neuron(active_neuronQ)                //added
                 );
             end
 //        end
@@ -144,14 +148,16 @@ module top_neurons#(
         .en_network(&en_network),
         .spike_in(network_spike_in),
         .networkDone(networkDone),
-        .spike_out(spike_in)
+        .spike_out(spike_in),
+        .bits_in_active_neuron(bits_in_active_neuron)
     );
 
 
-    localparam IDLE = 0, WR = 1, NEURON = 2, RD = 3;
+    localparam IDLE = 0, WR = 1, NEURON = 2, RD = 3;         
+    localparam BEGIN_WR={FP_DATA_WIDTH{1'b1}};                         //added
     localparam SPIKE_IN_WIDTH = TEN_DATA_WIDTH + NEURON_ID_WIDTH;
     
-    reg [1:0]               curr_state, next_state;
+    reg [1:0]               curr_state, next_state;                   
     reg [NUM_NEURON-1:0]    neuron_statesD, neuron_statesQ;
     reg [NEURON_ID_WIDTH:0] neuron_ind;
     reg                     incr_neuron_id;
@@ -189,16 +195,19 @@ module top_neurons#(
         Q_in = {TEN_DATA_WIDTH{1'b0}};
         neuronI_in = {NEURON_ID_WIDTH{1'b0}};
         neuron_statesD = neuron_statesQ;
+        active_neuronD = active_neuronQ;                //added
         case(curr_state)
             IDLE: begin
-                if (ins == WR) begin
+                if (ins == BEGIN_WR) begin                     //changed WR to BEGIN_WR
                     next_state = WR;
+                    active_neuronD = active_neuronQ;           //added
                 end else begin
                     next_state = IDLE;
+                    active_neuronD = ins[NEURON_ID_WIDTH-1:0];  //added
                 end
             end
             WR: begin
-                if (&neuronWrDone) begin
+                if (neuronWrDone[active_neuronQ-1]==1) begin
                     next_state = NEURON;
                 end else begin
                     next_state = WR;
@@ -247,7 +256,7 @@ module top_neurons#(
             end
             
             RD: begin
-                if (readout_counter == NUM_NEURON-16) begin
+                if (readout_counter > active_neuronQ) begin
                     en_readout_counter = 1'b0;
                     next_state = NEURON;
                 end else begin
@@ -288,13 +297,38 @@ module top_neurons#(
     always @(posedge clk) begin
         if (!reset_l) begin
             curr_state <= IDLE;
-            neuron_statesQ <= {NUM_NEURON{1'b0}};
+            neuron_statesQ <= {NUM_NEURON{1'b1}};
             neuron_ind <= {NEURON_ID_WIDTH+1{1'b0}};
+            active_neuronQ <= {NUM_NEURON{1'b1}};         //added
+            bits_in_active_neuron <= 4'd9;                //added
+            readout_counter <= {NEURON_ID_WIDTH+1{1'b0}};
         end else begin
             curr_state <= next_state;
             neuron_statesQ <= neuron_statesD;
+            active_neuronQ <= active_neuronD;         //added
+            
+                if(active_neuronQ>8'd255)
+                   bits_in_active_neuron<=9;
+                else if(active_neuronQ>7'd127)
+                   bits_in_active_neuron<=8;
+                else if(active_neuronQ>6'd63)
+                   bits_in_active_neuron<=7;
+                else if(active_neuronQ>5'd31)
+                   bits_in_active_neuron<=6;
+                else if(active_neuronQ>4'd15)
+                   bits_in_active_neuron<=5;
+                else if(active_neuronQ>3'd7)
+                   bits_in_active_neuron<=4;
+                else if(active_neuronQ>2'd3)
+                   bits_in_active_neuron<=3;
+                else
+                   bits_in_active_neuron<=2;
+            
             if (incr_neuron_id) begin
-                neuron_ind <= neuron_ind + 1;
+                if(neuron_ind == active_neuronQ-1)      //added
+                    neuron_ind <= 0;
+                else
+                    neuron_ind <= neuron_ind + 1;
             end 
 //            else begin
 //                neuron_ind <= 0;

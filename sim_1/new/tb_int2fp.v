@@ -21,14 +21,14 @@ module tb_int2fp;
 
         // Test 2: Positive number
         // 1
-        int_val = 16'b0000_0000_0000_0001;
+        int_val = 16'b1000_0000_0000_0010;
         #10;
         $display("Input: %d, Output: %h, Expected: %h", int_val, fp16_val, 16'h3C00);
         $display("Input: %d, Output: %b, Expected: %b", int_val, fp16_val, 16'h3C00);  
 
         // Test 3: Positive number
         // 32767
-        int_val = 16'b0111_1111_1111_1111;
+        int_val = 16'b1000_0000_0000_0100;
         #10;
         $display("Input: %d, Output: %h, Expected: %h", int_val, fp16_val, 16'h7800); 
 
