@@ -37,13 +37,13 @@ module neuron#(
     input wire                          wrNeuronI,
     input wire                          wrMu,
     // Data from TOP IO 
-    input wire [NEURON_ID_WIDTH-1:0]    neuronI_in,// 10 bits
+    input wire [NEURON_ID_WIDTH-1:0]    neuronI_in,// 9 bits
     input wire [FP_DATA_WIDTH-1:0]      Vmem_in, // 16 bits
     input wire [TEN_DATA_WIDTH-1:0]     Q_in, // 2 bits
     input wire [FP_DATA_WIDTH-1:0]      mu_in, // 16 bits
     input wire [NEURON_ID_WIDTH-1:0]    active_neuron,                    //added
     // Data from network
-    input wire [TEN_DATA_WIDTH+NEURON_ID_WIDTH-1:0]   spike_in, // 12 bits
+    input wire [TEN_DATA_WIDTH+NEURON_ID_WIDTH-1:0]   spike_in, // 11 bits
     // Done from network
     input wire                          networkDone,
     // Output
@@ -128,7 +128,7 @@ module neuron#(
         .dout(dVmem)
     );    
     
-    localparam IDLE = 0, RECV1 = 1, EMIT = 2, WRQ = 3, WRVMEM = 4, WRNEURONI = 5, WRMU = 6, RECV2 = 7, NETWORK = 8, STATE_READOUT = 9;
+    localparam IDLE = 0, RECV1 = 1, EMIT = 2, WRQ = 3, WRVMEM = 4, WRNEURONI = 5, WRMU = 6, RECV2 = 7, NETWORK = 8;
     localparam SPIKE_IN_WIDTH = TEN_DATA_WIDTH + NEURON_ID_WIDTH;
 
     always @* begin

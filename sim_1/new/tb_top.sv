@@ -68,19 +68,33 @@ module tb_top_neurons;
         reset_l = 0;
         rd = 0;
         ins = 0;
-        $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/vmems.txt", V_mem_stored);
-        $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/mus.txt", Mu_stored);
-        $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/init_mus.txt", Init_Mu_stored);
-        $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_1.txt", Q_1);
-        $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_2.txt", Q_2);
-        $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_3.txt", Q_3);
-        $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_4.txt", Q_4);
-        $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_5.txt", Q_5);
-        $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_6.txt", Q_6);
-        $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_7.txt", Q_7);
-        $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_8.txt", Q_8);
-        $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_9.txt", Q_9);
-        $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_10.txt", Q_10);
+        // $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/vmems.txt", V_mem_stored);
+        // $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/mus.txt", Mu_stored);
+        // $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/init_mus.txt", Init_Mu_stored);
+        // $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_1.txt", Q_1);
+        // $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_2.txt", Q_2);
+        // $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_3.txt", Q_3);
+        // $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_4.txt", Q_4);
+        // $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_5.txt", Q_5);
+        // $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_6.txt", Q_6);
+        // $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_7.txt", Q_7);
+        // $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_8.txt", Q_8);
+        // $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_9.txt", Q_9);
+        // $readmemh("C:/Users/faiek/Downloads/neurosa_srcs/sim_1/new/Q_10.txt", Q_10);
+        /////////////////////////////////////////////////////////////////////////////
+        $readmemh("D:/zihao/NeuroSA_workspace/neuroSA_fpga/neuroSA_fpga_v1/neuroSA_fpga_v1.srcs/sim_1/new/vmems.txt", V_mem_stored);
+        $readmemh("D:/zihao/NeuroSA_workspace/neuroSA_fpga/neuroSA_fpga_v1/neuroSA_fpga_v1.srcs/sim_1/new/mus.txt", Mu_stored);
+        $readmemh("D:/zihao/NeuroSA_workspace/neuroSA_fpga/neuroSA_fpga_v1/neuroSA_fpga_v1.srcs/sim_1/new/init_mus.txt", Init_Mu_stored);
+        $readmemh("D:/zihao/NeuroSA_workspace/neuroSA_fpga/neuroSA_fpga_v1/neuroSA_fpga_v1.srcs/sim_1/new/Q_1.txt", Q_1);
+        $readmemh("D:/zihao/NeuroSA_workspace/neuroSA_fpga/neuroSA_fpga_v1/neuroSA_fpga_v1.srcs/sim_1/new/Q_2.txt", Q_2);
+        $readmemh("D:/zihao/NeuroSA_workspace/neuroSA_fpga/neuroSA_fpga_v1/neuroSA_fpga_v1.srcs/sim_1/new/Q_3.txt", Q_3);
+        $readmemh("D:/zihao/NeuroSA_workspace/neuroSA_fpga/neuroSA_fpga_v1/neuroSA_fpga_v1.srcs/sim_1/new/Q_4.txt", Q_4);
+        $readmemh("D:/zihao/NeuroSA_workspace/neuroSA_fpga/neuroSA_fpga_v1/neuroSA_fpga_v1.srcs/sim_1/new/Q_5.txt", Q_5);
+        $readmemh("D:/zihao/NeuroSA_workspace/neuroSA_fpga/neuroSA_fpga_v1/neuroSA_fpga_v1.srcs/sim_1/new/Q_6.txt", Q_6);
+        $readmemh("D:/zihao/NeuroSA_workspace/neuroSA_fpga/neuroSA_fpga_v1/neuroSA_fpga_v1.srcs/sim_1/new/Q_7.txt", Q_7);
+        $readmemh("D:/zihao/NeuroSA_workspace/neuroSA_fpga/neuroSA_fpga_v1/neuroSA_fpga_v1.srcs/sim_1/new/Q_8.txt", Q_8);
+        $readmemh("D:/zihao/NeuroSA_workspace/neuroSA_fpga/neuroSA_fpga_v1/neuroSA_fpga_v1.srcs/sim_1/new/Q_9.txt", Q_9);
+        $readmemh("D:/zihao/NeuroSA_workspace/neuroSA_fpga/neuroSA_fpga_v1/neuroSA_fpga_v1.srcs/sim_1/new/Q_10.txt", Q_10);
         #10
 
         // Apply reset
