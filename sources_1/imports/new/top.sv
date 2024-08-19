@@ -179,10 +179,12 @@ module top_neurons#(
     always @* begin
         // Top control
         mu_in[0] = ins[FP_DATA_WIDTH-1:0];
-        for (integer k = 0; k < NUM_NEURON-1; k = k + 1) begin
+        integer k;
+        for (k = 0; k < NUM_NEURON-1; k = k + 1) begin
             mu_in[k+1] = mu_out[k];
         end
-        for (integer j = 0; j < NUM_NEURON; j = j + 1) begin
+        integer j;
+        for (j = 0; j < NUM_NEURON; j = j + 1) begin
             network_spike_in[2*j+1] = spike_out[j][1];
             network_spike_in[2*j] = spike_out[j][0];
         end
