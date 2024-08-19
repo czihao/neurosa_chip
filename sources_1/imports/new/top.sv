@@ -22,8 +22,8 @@
 module top_neurons#(
     parameter FP_DATA_WIDTH = 16,
     parameter TEN_DATA_WIDTH = 2,
-    parameter NUM_NEURON = 512,
-    parameter NEURON_ID_WIDTH = 9
+    parameter NUM_NEURON = 256,
+    parameter NEURON_ID_WIDTH = 8
 ) (
     input wire                          clk,
     input wire                          reset_l,

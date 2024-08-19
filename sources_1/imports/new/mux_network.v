@@ -23,8 +23,8 @@
 module mux_network #(
     parameter FP_DATA_WIDTH = 16,
     parameter TEN_DATA_WIDTH = 2,
-    parameter NUM_NEURON = 512,
-    parameter NEURON_ID_WIDTH = 9
+    parameter NUM_NEURON = 256,
+    parameter NEURON_ID_WIDTH = 8
 )(
     input   wire                                        clk,
     input   wire                                        reset_l,
@@ -50,7 +50,8 @@ module mux_network #(
     
  //    assign feedback = lfsr_state[1] ^ lfsr_state[0];
  //  assign feedback = lfsr_state[9] ^ lfsr_state[6];
-     assign feedback = lfsr_state[8] ^ lfsr_state[4];
+//     assign feedback = lfsr_state[8] ^ lfsr_state[4];
+    assign feedback = lfsr_state[7] ^ lfsr_state[5] ^ lfsr_state[4] ^ lfsr_state[3]; 
     
     always@* begin
         en_lfsr = 1'b0;
@@ -87,30 +88,31 @@ module mux_network #(
     always @(posedge clk) begin
         if (!reset_l) begin
             curr_state <= NETWORK0;
-            lfsr_state <= 9'b110010011;
-            spike_inQ <= {1024{1'b0}};
-            spike_id <= 10'b00_0000_0000;
+            lfsr_state <= 8'b1000_1011;
+            spike_inQ <= {512{1'b0}};
+            spike_id <= 9'b0_0000_0000;
         end else if (top_en_network) begin
             curr_state <= next_state;
             spike_inQ <= spike_inD;
             if (en_lfsr) begin
                 lfsr_state <= {lfsr_state[NEURON_ID_WIDTH-2:0], feedback};
-                if(bits_in_active_neuron==9)
+                
+                if(bits_in_active_neuron==8)
                 spike_id <= {lfsr_state[NEURON_ID_WIDTH-2:0], feedback, 1'b0};
-                else if(bits_in_active_neuron==8)
-                spike_id <= {{{1'b0}},lfsr_state[NEURON_ID_WIDTH-3:0], feedback, 1'b0};
                 else if(bits_in_active_neuron==7)
-                spike_id <= {{2{1'b0}},lfsr_state[NEURON_ID_WIDTH-4:0], feedback, 1'b0};
+                spike_id <= {{{1'b0}},lfsr_state[NEURON_ID_WIDTH-3:0], feedback, 1'b0};
                 else if(bits_in_active_neuron==6)
-                spike_id <= {{3{1'b0}},lfsr_state[NEURON_ID_WIDTH-5:0], feedback, 1'b0};
+                spike_id <= {{2{1'b0}},lfsr_state[NEURON_ID_WIDTH-4:0], feedback, 1'b0};
                 else if(bits_in_active_neuron==5)
-                spike_id <= {{4{1'b0}},lfsr_state[NEURON_ID_WIDTH-6:0], feedback, 1'b0};
+                spike_id <= {{3{1'b0}},lfsr_state[NEURON_ID_WIDTH-5:0], feedback, 1'b0};
                 else if(bits_in_active_neuron==4)
-                spike_id <= {{5{1'b0}},lfsr_state[NEURON_ID_WIDTH-7:0], feedback, 1'b0};
+                spike_id <= {{4{1'b0}},lfsr_state[NEURON_ID_WIDTH-6:0], feedback, 1'b0};
                 else if(bits_in_active_neuron==3)
-                spike_id <= {{6{1'b0}},lfsr_state[NEURON_ID_WIDTH-8:0], feedback, 1'b0};
+                spike_id <= {{5{1'b0}},lfsr_state[NEURON_ID_WIDTH-7:0], feedback, 1'b0};
+//                else if(bits_in_active_neuron==3)
+//                spike_id <= {{6{1'b0}},lfsr_state[NEURON_ID_WIDTH-8:0], feedback, 1'b0};
                 else
-                spike_id <= {{7{1'b0}},lfsr_state[NEURON_ID_WIDTH-9:0], feedback, 1'b0};
+                spike_id <= {{6{1'b0}},lfsr_state[NEURON_ID_WIDTH-8:0], feedback, 1'b0};
             end
         end
     end

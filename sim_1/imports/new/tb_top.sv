@@ -5,10 +5,10 @@ module tb_top_neurons;
     // Parameters
     parameter FP_DATA_WIDTH = 16;
     parameter TEN_DATA_WIDTH = 2;
-    parameter NUM_NEURON = 512;          // Set to 4 for testing
-    parameter NEURON_ID_WIDTH = 9;
+    parameter NUM_NEURON = 256;          // Set to 4 for testing
+    parameter NEURON_ID_WIDTH = 8;
     parameter NUM_ACTIVE_NEURON = 10;
-    parameter NUM_OF_MUS = 166;
+    parameter NUM_OF_MUS = 181;
 
     // Inputs
     reg clk;
@@ -287,7 +287,7 @@ module tb_top_neurons;
 //            ins = 0;
         end
         
-        #10;
+        #40;
         rd = 1;
         #15;
         $display("Out: %b", outs);
