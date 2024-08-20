@@ -175,14 +175,15 @@ module top_neurons#(
 //    assign ins = io;
 //    assign io = rd ? outs:16'bZ;
 //    assign mu_in_internal[0] = mu_in;
+    integer k, j;
     
     always @* begin
         // Top control
         mu_in[0] = ins[FP_DATA_WIDTH-1:0];
-        for (int k = 0; k < NUM_NEURON-1; k = k + 1) begin
+        for (k = 0; k < NUM_NEURON-1; k = k + 1) begin
             mu_in[k+1] = mu_out[k];
         end
-        for (int j = 0; j < NUM_NEURON; j = j + 1) begin
+        for (j = 0; j < NUM_NEURON; j = j + 1) begin
             network_spike_in[2*j+1] = spike_out[j][1];
             network_spike_in[2*j] = spike_out[j][0];
         end
